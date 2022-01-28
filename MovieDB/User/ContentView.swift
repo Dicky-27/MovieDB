@@ -8,25 +8,27 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var navBarTitle = "MovieDB"
+    init() {
+        let standardAppearance = UITabBarAppearance()
+        UITabBar.appearance().backgroundColor = UIColor(Color.backgroundBar)
+        standardAppearance.backgroundColor = UIColor(Color.backgroundBar)
+        UITabBar.appearance().standardAppearance = standardAppearance
+    }
     var body: some View {
         NavigationView {
             TabView {
-                HomeTabItem(navBarTitle: $navBarTitle)
+                HomeTabItem()
                     .tabItem {
                         Image(systemName: "house")
                     }
-                    .navigationTitle(navBarTitle)
-                PopulerTabItem(navBarTitle: $navBarTitle)
+                PopulerTabItem()
                     .tabItem {
                         Image(systemName: "rosette")
                     }
-                    .navigationTitle(navBarTitle)
-                FavoriteTabItem(navBarTitle: $navBarTitle)
+                FavoriteTabItem()
                     .tabItem {
                         Image(systemName: "heart")
                     }
-                    .navigationTitle(navBarTitle)
             }
         }
     }

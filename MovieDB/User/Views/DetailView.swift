@@ -19,25 +19,25 @@ struct DetailView: View {
         sortDescriptors: [NSSortDescriptor(keyPath: \Item.id, ascending: true)]
     ) var item: FetchedResults<Item>
     
-      var btnBack : some View { Button(action: {
-          self.presentationMode.wrappedValue.dismiss()
-          }) {
-              HStack {
-              Image(systemName: "arrow.backward")
-                      .font(.system(size: 25))
-                  .foregroundColor(.yellow)
-              }
-          }
-      }
+    var btnBack : some View { Button(action: {
+        self.presentationMode.wrappedValue.dismiss()
+    }) {
+        HStack {
+            Image(systemName: "arrow.backward")
+                .font(.system(size: 25))
+                .foregroundColor(.yellow)
+        }
+    }
+    }
     
     init(movie: Movie) {
         let viewModel = ViewModel(movie: movie)
         _viewModel = StateObject(wrappedValue: viewModel)
     }
-      
+    
     var body: some View {
         ScrollView(showsIndicators: false) {
-            VStack {
+            VStack(alignment: .leading) {
                 ZStack(alignment: .topLeading) {
                     ZStack(alignment: .bottom) {
                         WebImage(url: URL(string: "\(Constant.BASE_IMAGE_URL)\(viewModel.movie.poster_path)"))
@@ -109,15 +109,27 @@ struct DetailView: View {
                         .padding(.top, 50)
                         .padding(.leading, 40)
                 }
-                
                 Text(viewModel.movie.overview)
                     .padding(.horizontal, 30)
+                    .foregroundColor(.white)
+                
+                Text("Release Date :")
+                    .font(.headline)
+                    .foregroundColor(.white)
+                    .padding(.leading, 30)
+                    .padding(.top)
+        
+                Text(viewModel.movie.release_date)
+                    .font(.caption)
+                    .foregroundColor(.white)
+                    .padding(.leading, 30)
                 Spacer()
             }
             .padding(.horizontal)
             .navigationBarHidden(true)
         }
         .edgesIgnoringSafeArea(.top)
+        .background(Color.backgroundColor)
         .onAppear {
             isFavorite = checkIfItemExist(id: Int64(viewModel.movie.id))
         }

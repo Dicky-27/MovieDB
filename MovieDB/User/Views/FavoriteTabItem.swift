@@ -11,7 +11,6 @@ struct FavoriteTabItem: View {
     @State var allMovies = [Movie]()
     @State var filtered = [Movie]()
     @State var searchText = ""
-    @Binding var navBarTitle: String
     @Environment(\.managedObjectContext) var managedObjectContext
     @FetchRequest(
         entity: Item.entity(),
@@ -19,27 +18,37 @@ struct FavoriteTabItem: View {
     )var items: FetchedResults<Item>
     
     var body: some View {
-        ScrollView {
+        VStack {
             SearchBar(text: $searchText)
-                .padding()
-            if searchText != "" {
-                HStack {
-                    Text("Showing result of")
-                        .font(.system(size: 17, weight: .regular))
-                    Text("'\(searchText)'")
-                        .font(.system(size: 15, weight: .bold))
-                }.padding(.horizontal)
-                
-            }
-            ForEach(filtered.filter({searchText.isEmpty ? true : $0.title.contains(searchText)}), id: \.id) { item in
-                NavigationLink(destination: DetailView(movie: item)) {
-                    FavoriteForList(movie: item)
-                        .padding(.horizontal)
+            .padding(.top, 50)
+            .padding(.horizontal, 20)
+            .frame(width: UIScreen.main.bounds.width, height: 100, alignment: .leading)
+            .background(Color.backgroundBar)
+            .padding(.bottom, 10)
+            ScrollView {
+                if searchText != "" {
+                    HStack {
+                        Text("Showing result of")
+                            .font(.system(size: 17, weight: .regular))
+                            .foregroundColor(Color.white)
+                        Text("'\(searchText)'")
+                            .font(.system(size: 15, weight: .bold))
+                            .foregroundColor(Color.white)
+                    }.padding(.horizontal)
+                }
+                ForEach(filtered.filter({searchText.isEmpty ? true : $0.title.contains(searchText)}), id: \.id) { item in
+                    NavigationLink(destination: DetailView(movie: item)) {
+                        FavoriteForList(movie: item)
+                            .padding(.horizontal)
+                    }
                 }
             }
         }
+        .edgesIgnoringSafeArea(.top)
+        .background(Color.backgroundColor)
+        .navigationTitle("")
+        .navigationBarHidden(true)
         .onAppear {
-            navBarTitle = "Favorite"
             loadData()
         }
     }
@@ -71,6 +80,6 @@ struct FavoriteTabItem: View {
 
 struct FavoriteTabItem_Previews: PreviewProvider {
     static var previews: some View {
-        FavoriteTabItem(navBarTitle: .constant("Favorite"))
+        FavoriteTabItem()
     }
 }

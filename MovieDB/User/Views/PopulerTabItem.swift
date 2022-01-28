@@ -11,36 +11,41 @@ struct PopulerTabItem: View {
     
     @State private var searchtext = ""
     @ObservedObject private var viewModel = ViewModel.shared
-    @Binding var navBarTitle: String
     
     private var gridItemLayout = [
         GridItem(.flexible(), spacing: 15),
         GridItem(.flexible(), spacing: 15)
     ]
     
-    init(navBarTitle: Binding<String>) {
-        self._navBarTitle = navBarTitle
-    }
-    
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading) {
-                SearchBar(text: $searchtext)
-                    .padding()
-                if searchtext != "" {
-                    HStack {
-                        Text("Showing result of")
-                            .font(.system(size: 17, weight: .regular))
-                        Text("'\(searchtext)'")
-                            .font(.system(size: 15, weight: .bold))
-                    }.padding(.horizontal)
-                    
+        VStack {
+            SearchBar(text: $searchtext)
+                .padding(.top, 50)
+                .padding(.horizontal, 20)
+                .frame(width: UIScreen.main.bounds.width, height: 100, alignment: .leading)
+                .background(Color.backgroundBar)
+                .padding(.bottom, 10)
+            ScrollView {
+                VStack(alignment: .leading) {
+                    if searchtext != "" {
+                        HStack {
+                            Text("Showing result of")
+                                .font(.system(size: 17, weight: .regular))
+                                .foregroundColor(Color.white)
+                            Text("'\(searchtext)'")
+                                .font(.system(size: 15, weight: .bold))
+                                .foregroundColor(.white)
+                        }.padding(.horizontal)
+                        
+                    }
+                    moviesGrid()
                 }
-                moviesGrid()
             }
-        }.onAppear {
-            navBarTitle = "Popular"
         }
+        .edgesIgnoringSafeArea(.top)
+        .background(Color.backgroundColor)
+        .navigationTitle("")
+        .navigationBarHidden(true)
     }
     
     @ViewBuilder
@@ -58,6 +63,6 @@ struct PopulerTabItem: View {
 
 struct PopulerTabItem_Previews: PreviewProvider {
     static var previews: some View {
-        PopulerTabItem(navBarTitle: .constant("Populer"))
+        PopulerTabItem()
     }
 }

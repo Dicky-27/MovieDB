@@ -10,16 +10,28 @@ import SDWebImageSwiftUI
 
 struct HomeTabItem: View {
     @ObservedObject private var viewModel = ViewModel.shared
-    @Binding var navBarTitle: String
     
     var body: some View {
-        ScrollView(showsIndicators: false) {
-            bannerView()
-            populerMovies()
-            comingSoonMovies()
-        }.onAppear {
-            navBarTitle = "MovieDB"
+        VStack(alignment: .leading) {
+            Text("MovieDB")
+                .font(.title)
+                .fontWeight(.bold)
+                .foregroundColor(.white)
+                .padding(.top, 50)
+                .padding(.leading, 20)
+                .frame(width: UIScreen.main.bounds.width, height: 100, alignment: .leading)
+                .background(Color.backgroundBar)
+                .padding(.bottom, 10)
+            ScrollView(showsIndicators: false) {
+                bannerView()
+                populerMovies()
+                comingSoonMovies()
+            }
         }
+        .edgesIgnoringSafeArea(.top)
+        .background(Color.backgroundColor)
+        .navigationTitle("")
+        .navigationBarHidden(true)
     }
     
     @ViewBuilder
@@ -46,6 +58,7 @@ struct HomeTabItem: View {
         VStack(alignment: .leading) {
             Text("Populer Movies")
                 .font(.system(size: 17, weight: .bold))
+                .foregroundColor(.white)
             ScrollView(.horizontal, showsIndicators: false) {
                 if viewModel.populerMovies.isEmpty {
                     ProgressView()
@@ -70,6 +83,7 @@ struct HomeTabItem: View {
         VStack(alignment: .leading) {
             Text("Coming Soon")
                 .font(.system(size: 17, weight: .bold))
+                .foregroundColor(.white)
             ScrollView(.horizontal, showsIndicators: false) {
                 if viewModel.comingSoonMovies.isEmpty {
                     ProgressView()
@@ -92,6 +106,6 @@ struct HomeTabItem: View {
 
 struct HomeTabItem_Previews: PreviewProvider {
     static var previews: some View {
-        HomeTabItem(navBarTitle: .constant("MovieDB"))
+        HomeTabItem()
     }
 }
